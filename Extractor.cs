@@ -5,6 +5,7 @@ using System.Text;
 using HtmlAgilityPack;
 using System.Net;
 using System.IO;
+using System.Threading;
 
 namespace ParsXtmlExamle
 {
@@ -15,7 +16,7 @@ namespace ParsXtmlExamle
         String letter;
         static String separator = "_";
         String suffix;
-
+        static readonly int timeout = 150000;//ms
 
         public Extractor(String baseUrl, String stock, String letter, String suffix )
         {
@@ -28,7 +29,10 @@ namespace ParsXtmlExamle
         public void Extract()
         {
 
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+
             WebClient webClient = new WebClient();
+            
            // String filePath = @"\temp.html";
 
             String url = constructUrl();

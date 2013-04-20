@@ -5,6 +5,8 @@ using System.Text;
 using System.Net;
 using System.IO;
 using HtmlAgilityPack;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ParsXtmlExamle
 {
@@ -22,6 +24,8 @@ namespace ParsXtmlExamle
                 alphabet.Add(ch.ToString());
             }
 
+            List<string> alphabetT = alphabet.GetRange(0, 3);
+
 
             stocks.Add("NYSE");
             stocks.Add("NASDAQ");
@@ -30,10 +34,36 @@ namespace ParsXtmlExamle
             // * is placeholder to replace by stock and ^ for letter
             String baseUrl = "http://www.findata.co.nz/markets/*/symbols/^";
 
-            Extractor ex = new Extractor(baseUrl, stocks[0], alphabet[22],".htm");
-            ex.Extract();
+            int nrOfCores = Environment.ProcessorCount;
 
-         
+        
+           /* Parallel.ForEach(alphabet, s =>
+                {
+                    Extractor ex = new Extractor(baseUrl, stocks[0], s, ".htm");
+                  
+                    ex.Extract();
+
+                });
+
+
+
+
+            Parallel.ForEach(alphabet, s =>
+             {
+                    DatabaseHelper dh = new DatabaseHelper(stocks[0], s);
+
+                    dh.LoadCompaniesToDatabase();
+
+                });
+
+            */
+            Parallel.ForEach(alphabetT, s =>
+            {
+                DatabaseHelper dh = new DatabaseHelper(stocks[0], "J");
+
+                dh.LoadRecordsToDatabase();
+
+            });
 
            
 
