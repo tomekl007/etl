@@ -24,7 +24,7 @@ namespace ParsXtmlExamle
                 alphabet.Add(ch.ToString());
             }
 
-            List<string> alphabetT = alphabet.GetRange(0, 3);
+            List<string> alphabetT = alphabet.GetRange(11, 12);
 
 
             stocks.Add("NYSE");
@@ -47,27 +47,34 @@ namespace ParsXtmlExamle
 
 
 
-
-            Parallel.ForEach(alphabet, s =>
+          */  
+          Parallel.ForEach(alphabetT, s =>
              {
                     DatabaseHelper dh = new DatabaseHelper(stocks[0], s);
 
                     dh.LoadCompaniesToDatabase();
 
                 });
-
-            */
-            Parallel.ForEach(alphabetT, s =>
+            
+            
+           Parallel.ForEach(alphabetT, s =>
             {
-                DatabaseHelper dh = new DatabaseHelper(stocks[0], "J");
+                DatabaseHelper dh = new DatabaseHelper(stocks[0], s);
 
                 dh.LoadRecordsToDatabase();
 
             });
 
-           
 
-           
+            Parallel.ForEach(alphabetT, s =>
+            {
+                DatabaseHelper test = new DatabaseHelper(stocks[0], s);
+
+                test.testAddedRecord();
+
+            });
+
+          
 
         }
     }

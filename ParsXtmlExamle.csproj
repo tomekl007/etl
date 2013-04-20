@@ -127,6 +127,8 @@
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Properties\DataSources\StocExchangeEntities.datasource" />
+    <None Include="Properties\DataSources\StocExchangeEntities1.datasource" />
+    <None Include="Properties\DataSources\StocExchangeEntities3.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

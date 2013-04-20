@@ -16,7 +16,7 @@ namespace ParsXtmlExamle
         String letter;
         static String separator = "_";
         String suffix;
-        static readonly int timeout = 150000;//ms
+        //static readonly int timeout = 150000;//ms
 
         public Extractor(String baseUrl, String stock, String letter, String suffix )
         {

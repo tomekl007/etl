@@ -12,8 +12,8 @@ namespace ParsXtmlExamle
         private String stockName;
         private String letter;
         private String separator = "-";
-        private static readonly string connectionString = 
-            ConfigurationManager.ConnectionStrings["StocExchangeEntities"].ConnectionString;
+        private static readonly string connectionString =
+            ConfigurationManager.ConnectionStrings["StocExchangeEntities2"].ConnectionString;
         private String filePath;
        
 
@@ -117,6 +117,66 @@ namespace ParsXtmlExamle
         internal void LoadRecordsToDatabase()
         {
             List<String> recordsToAdd = readAllRecordsAndSymbol();
+            ObjectContext context = new ObjectContext(connectionString);
+            ObjectSet<Company> company = context.CreateObjectSet<Company>();
+           // Console.WriteLine("nr of records before persist : " + company.Count());
+            
+            ObjectSet<Record> records = context.CreateObjectSet<Record>();
+
+
+            Console.WriteLine("nr of records before persist : " + records.Count());
+
+            for (int i = 0; i < recordsToAdd.Count; i += 7)
+            {
+                Record r = new Record();
+                r.ChangeOne = 2.23;
+
+                r.CompanySymbol = recordsToAdd[i];
+                r.High = float.Parse(recordsToAdd[i+1]);
+                r.Low = float.Parse(recordsToAdd[i + 2]);
+                r.Close = float.Parse(recordsToAdd[i + 3]);
+               // r.Volume = int.Parse(recordsToAdd[i + 4]);
+                String volume = recordsToAdd[i + 4].Replace(",", "");
+                Console.WriteLine(volume);
+                r.Volume = int.Parse(volume);
+                r.ChangeOne = float.Parse(recordsToAdd[i + 5]);
+                r.ChangeTwo = float.Parse(recordsToAdd[i + 6]);
+                //DateTime today = new DateTime();
+               // var sqlFormattedDate = today.Date.ToString("yyyy-MM-dd HH:mm:ss");
+                r.DateOfRecord = DateTime.Today;
+                //c.Symbol = companiesToAdd[i];
+               // c.Name = companiesToAdd[i + 1];
+               // company.AddObject(c);
+                //r.Id = (System.Guid)1;
+              //  r.Id = 3;
+               
+                records.AddObject(r);
+            }
+
+            //Console.WriteLine(company.Count());
+            //Company c = new Company();
+            // c.Symbol = "CYST";
+            // c.Name = "WAR";
+            //   company.AddObject(c);
+
+            try
+            {
+            
+                context.SaveChanges();
+            }
+           catch (Exception e)
+            {
+                Console.WriteLine("--catched : " + e.Message);
+            }
+
+
+
+            ObjectSet<Record> record2 = context.CreateObjectSet<Record>();
+            Console.WriteLine("after insering number of records is : " + record2.Count());
+            context.Dispose();
+
+
+
         }
 
         private List<string> readAllRecordsAndSymbol()
@@ -158,6 +218,32 @@ namespace ParsXtmlExamle
                   Console.WriteLine(s);
 
             return symbolAndRecordsData;
+        }
+
+        internal void testAddedRecord()
+        {
+            
+            ObjectContext context = new ObjectContext(connectionString);
+            ObjectSet<Company> companies = context.CreateObjectSet<Company>();
+            // Console.WriteLine("nr of records before persist : " + company.Count());
+
+            ObjectSet<Record> records = context.CreateObjectSet<Record>();
+            foreach(Company c in companies)
+            {
+                Console.WriteLine("company : " +  c.Name + " records :  "  );
+                foreach (Record r in c.Records)
+                {
+                    Console.WriteLine(r.DateOfRecord + " " + r.Volume);
+                }
+
+            }
+
+            foreach (Record r in records)
+            {
+                Console.WriteLine(r.Volume+ " for comapny "+ r.CompanySymbol + r.Company.Name );
+            }
+
+
         }
     }
 }

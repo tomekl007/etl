@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("StocExchangeModel", "company_record", "Companies", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ParsXtmlExamle.Company), "Records", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ParsXtmlExamle.Record), true)]
+[assembly: EdmRelationshipAttribute("StocExchangeModel", "company_record", "Companies", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ParsXtmlExamle.Company), "Records", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ParsXtmlExamle.Record), true)]
 
 #endregion
 
@@ -29,32 +29,32 @@ namespace ParsXtmlExamle
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    public partial class StocExchangeEntities : ObjectContext
+    public partial class StocExchangeEntities3 : ObjectContext
     {
         #region Constructors
     
         /// <summary>
-        /// Initializes a new StocExchangeEntities object using the connection string found in the 'StocExchangeEntities' section of the application configuration file.
+        /// Initializes a new StocExchangeEntities3 object using the connection string found in the 'StocExchangeEntities3' section of the application configuration file.
         /// </summary>
-        public StocExchangeEntities() : base("name=StocExchangeEntities", "StocExchangeEntities")
+        public StocExchangeEntities3() : base("name=StocExchangeEntities3", "StocExchangeEntities3")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new StocExchangeEntities object.
+        /// Initialize a new StocExchangeEntities3 object.
         /// </summary>
-        public StocExchangeEntities(string connectionString) : base(connectionString, "StocExchangeEntities")
+        public StocExchangeEntities3(string connectionString) : base(connectionString, "StocExchangeEntities3")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new StocExchangeEntities object.
+        /// Initialize a new StocExchangeEntities3 object.
         /// </summary>
-        public StocExchangeEntities(EntityConnection connection) : base(connection, "StocExchangeEntities")
+        public StocExchangeEntities3(EntityConnection connection) : base(connection, "StocExchangeEntities3")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -246,11 +246,13 @@ namespace ParsXtmlExamle
         /// <summary>
         /// Create a new Record object.
         /// </summary>
-        /// <param name="id">Initial value of the Id property.</param>
-        public static Record CreateRecord(global::System.String id)
+        /// <param name="dateOfRecord">Initial value of the DateOfRecord property.</param>
+        /// <param name="companySymbol">Initial value of the CompanySymbol property.</param>
+        public static Record CreateRecord(global::System.DateTime dateOfRecord, global::System.String companySymbol)
         {
             Record record = new Record();
-            record.Id = id;
+            record.DateOfRecord = dateOfRecord;
+            record.CompanySymbol = companySymbol;
             return record;
         }
 
@@ -406,34 +408,7 @@ namespace ParsXtmlExamle
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Id
-        {
-            get
-            {
-                return _Id;
-            }
-            set
-            {
-                if (_Id != value)
-                {
-                    OnIdChanging(value);
-                    ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Id");
-                    OnIdChanged();
-                }
-            }
-        }
-        private global::System.String _Id;
-        partial void OnIdChanging(global::System.String value);
-        partial void OnIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> DateOfRecord
+        public global::System.DateTime DateOfRecord
         {
             get
             {
@@ -441,21 +416,24 @@ namespace ParsXtmlExamle
             }
             set
             {
-                OnDateOfRecordChanging(value);
-                ReportPropertyChanging("DateOfRecord");
-                _DateOfRecord = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DateOfRecord");
-                OnDateOfRecordChanged();
+                if (_DateOfRecord != value)
+                {
+                    OnDateOfRecordChanging(value);
+                    ReportPropertyChanging("DateOfRecord");
+                    _DateOfRecord = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("DateOfRecord");
+                    OnDateOfRecordChanged();
+                }
             }
         }
-        private Nullable<global::System.DateTime> _DateOfRecord;
-        partial void OnDateOfRecordChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _DateOfRecord;
+        partial void OnDateOfRecordChanging(global::System.DateTime value);
         partial void OnDateOfRecordChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String CompanySymbol
         {
@@ -465,11 +443,14 @@ namespace ParsXtmlExamle
             }
             set
             {
-                OnCompanySymbolChanging(value);
-                ReportPropertyChanging("CompanySymbol");
-                _CompanySymbol = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CompanySymbol");
-                OnCompanySymbolChanged();
+                if (_CompanySymbol != value)
+                {
+                    OnCompanySymbolChanging(value);
+                    ReportPropertyChanging("CompanySymbol");
+                    _CompanySymbol = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("CompanySymbol");
+                    OnCompanySymbolChanged();
+                }
             }
         }
         private global::System.String _CompanySymbol;

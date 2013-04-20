@@ -17,7 +17,8 @@
   </EntityType>
   <EntityType Name="Records">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="DateOfRecord" />
+      <PropertyRef Name="CompanySymbol" />
     </Key>
     <Property Name="High" Type="float" />
     <Property Name="Low" Type="float" />
@@ -25,12 +26,11 @@
     <Property Name="Volume" Type="int" />
     <Property Name="ChangeOne" Type="float" />
     <Property Name="ChangeTwo" Type="float" />
-    <Property Name="Id" Type="nvarchar" Nullable="false" MaxLength="100" />
-    <Property Name="DateOfRecord" Type="datetime" />
-    <Property Name="CompanySymbol" Type="nvarchar" MaxLength="10" />
+    <Property Name="DateOfRecord" Type="datetime" Nullable="false" />
+    <Property Name="CompanySymbol" Type="nvarchar" Nullable="false" MaxLength="10" />
   </EntityType>
   <Association Name="company_record">
-    <End Role="Companies" Type="StocExchangeModel.Store.Companies" Multiplicity="0..1">
+    <End Role="Companies" Type="StocExchangeModel.Store.Companies" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Records" Type="StocExchangeModel.Store.Records" Multiplicity="*" />
