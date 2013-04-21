@@ -32,10 +32,12 @@ namespace ParsXtmlExamle
 
         public void LoadCompaniesToDatabase(){
 
+
             Console.WriteLine("loading to db for lettter : " + letter);
             List<String> companiesToAdd = readAllSymbolsAndNames();
             
             ObjectContext context = new ObjectContext(connectionString);
+            
             ObjectSet<Company> company = context.CreateObjectSet<Company>();
             Console.WriteLine("nr of records before persist : "+ company.Count() );
 
@@ -118,7 +120,7 @@ namespace ParsXtmlExamle
         {
             List<String> recordsToAdd = readAllRecordsAndSymbol();
             ObjectContext context = new ObjectContext(connectionString);
-            ObjectSet<Company> company = context.CreateObjectSet<Company>();
+            ObjectSet<Company> companies = context.CreateObjectSet<Company>();
            // Console.WriteLine("nr of records before persist : " + company.Count());
             
             ObjectSet<Record> records = context.CreateObjectSet<Record>();
@@ -129,15 +131,19 @@ namespace ParsXtmlExamle
             for (int i = 0; i < recordsToAdd.Count; i += 7)
             {
                 Record r = new Record();
-                r.ChangeOne = 2.23;
+                
 
-                r.CompanySymbol = recordsToAdd[i];
+                String companySymbol = recordsToAdd[i];
+                Company companyForRecord = companies.Single(c => c.Symbol == companySymbol);
+                
+
+                r.CompanySymbol = companySymbol;
                 r.High = float.Parse(recordsToAdd[i+1]);
                 r.Low = float.Parse(recordsToAdd[i + 2]);
                 r.Close = float.Parse(recordsToAdd[i + 3]);
                // r.Volume = int.Parse(recordsToAdd[i + 4]);
                 String volume = recordsToAdd[i + 4].Replace(",", "");
-                Console.WriteLine(volume);
+                
                 r.Volume = int.Parse(volume);
                 r.ChangeOne = float.Parse(recordsToAdd[i + 5]);
                 r.ChangeTwo = float.Parse(recordsToAdd[i + 6]);
@@ -149,7 +155,8 @@ namespace ParsXtmlExamle
                // company.AddObject(c);
                 //r.Id = (System.Guid)1;
               //  r.Id = 3;
-               
+
+                companyForRecord.Records.Add(r);
                 records.AddObject(r);
             }
 
@@ -214,8 +221,8 @@ namespace ParsXtmlExamle
             file.Close();
 
             Console.WriteLine("----------------------------");
-            foreach (String s in symbolAndRecordsData)
-                  Console.WriteLine(s);
+          //  foreach (String s in symbolAndRecordsData)
+            //      Console.WriteLine(s);
 
             return symbolAndRecordsData;
         }
@@ -231,18 +238,37 @@ namespace ParsXtmlExamle
             foreach(Company c in companies)
             {
                 Console.WriteLine("company : " +  c.Name + " records :  "  );
-                foreach (Record r in c.Records)
-                {
-                    Console.WriteLine(r.DateOfRecord + " " + r.Volume);
-                }
+                var recordsQ = records.Where(r => r.CompanySymbol == c.Symbol);
+                                        
+              
+                foreach (var rec in recordsQ)
+                    Console.WriteLine(rec.DateOfRecord + " " + rec.Volume);
+
+             //   foreach (Record r in c.Records)
+              //  {
+               //     Console.WriteLine(r.DateOfRecord + " " + r.Volume);
+              //  }
 
             }
 
-            foreach (Record r in records)
+        
+
+           
+
+
+          /* var query = from c in context.CreateObjectSet<Company>()
+                        select
+                        from r in c.Records
+                        select new { r.DateOfRecord, r.Volume };
+            foreach (var company in query)
+                foreach (var record in company)
+                    Console.WriteLine(record.DateOfRecord + " " + record.Volume);*/
+
+        /*    foreach (Record r in records)
             {
                 Console.WriteLine(r.Volume+ " for comapny "+ r.CompanySymbol + r.Company.Name );
             }
-
+            */
 
         }
     }

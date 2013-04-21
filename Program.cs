@@ -24,7 +24,7 @@ namespace ParsXtmlExamle
                 alphabet.Add(ch.ToString());
             }
 
-            List<string> alphabetT = alphabet.GetRange(11, 12);
+            List<string> alphabetT = alphabet.GetRange(3, 4);
 
 
             stocks.Add("NYSE");
